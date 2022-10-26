@@ -1,3 +1,3 @@
 #!/usr/bin/bash
 
-apt-get install curl lxc
+apt-get install ansible lxc
