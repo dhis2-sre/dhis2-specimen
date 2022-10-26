@@ -1,3 +1,3 @@
 #!/usr/bin/bash
 
-apt-get install ansible lxc
+apt-get install -y ansible lxc
