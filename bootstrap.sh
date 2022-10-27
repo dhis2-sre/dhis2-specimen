@@ -15,7 +15,7 @@ DHIS2_SPECIMEN_HOST=`curl -s http://169.254.169.254/openstack/latest/meta_data.j
 echo -e "127.0.0.1\tlocalhost\n127.0.1.1\t$DHIS2_SPECIMEN_HOST `hostname`\n\n::1\tlocalhost ip6-localhost ip6-loopback\nff02::1\tip6-allnodes\nff02::2\tip6-allrouters" > /etc/hosts
 
 # We install and configure a default OS environment for the DHIS2 instance
-apt-get install -yqq dialog git sed software-properties-common unattended-upgrades
+apt-get install -yqq dialog git sed software-properties-common ufw unattended-upgrades
 
 # Install newer Ansible
 apt-add-repository --yes --update ppa:ansible/ansible
@@ -35,6 +35,11 @@ sed -i "/^fqdn=\"\"/s//fqdn=\""$DHIS2_SPECIMEN_HOST"\"/" $DHIS2_TOOLS_DIR/deploy
 sed -i "/^guest_os=22.04/s//guest_os=`lsb_release -rs`/" $DHIS2_TOOLS_DIR/deploy/inventory/hosts
 
 # Deploy DHIS2
-ansible-playbook $DHIS2_TOOLS_DIR/deploy/lxd_setup.yml
-ansible-playbook $DHIS2_TOOLS_DIR/deploy/dhis2.yml -i $DHIS2_TOOLS_DIR/deploy/inventory/hosts
+#ansible-playbook $DHIS2_TOOLS_DIR/deploy/lxd_setup.yml
+#ansible-playbook $DHIS2_TOOLS_DIR/deploy/dhis2.yml -i $DHIS2_TOOLS_DIR/deploy/inventory/hosts
+
+# TODO: use absolute paths
+cd $DHIS2_TOOLS_DIR/deploy
+ansible-playbook lxd_setup.yml
+ansible-playbook dhis2.yml -i ./inventory/hosts
 
