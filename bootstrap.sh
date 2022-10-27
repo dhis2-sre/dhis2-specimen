@@ -43,7 +43,7 @@ sed -i "/^guest_os=22.04/s//guest_os=`lsb_release -rs`/" $DHIS2_TOOLS_DIR/deploy
 #ansible-playbook $DHIS2_TOOLS_DIR/deploy/lxd_setup.yml
 #ansible-playbook $DHIS2_TOOLS_DIR/deploy/dhis2.yml -i $DHIS2_TOOLS_DIR/deploy/inventory/hosts
 
-# TODO: use absolute paths
+# TODO: use absolute paths and fix playbook names in the documentation
 cd $DHIS2_TOOLS_DIR/deploy
 ansible-playbook lxd_setup.yml
 ansible-playbook dhis2.yml -i ./inventory/hosts
