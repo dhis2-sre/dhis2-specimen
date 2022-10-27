@@ -6,12 +6,19 @@ DHIS2_TOOLS_DIR="/opt/dhis2-server-tools"
 apt-get -qq update
 apt-get -yqq dist-upgrade
 
+# Configure the hostname
+apt-get install -yqq curl jq
+DHIS2_SPECIMEN_HOST=`curl -s http://169.254.169.254/openstack/latest/meta_data.json | jq -j .name`
+
+echo "127.0.0.1\tlocalhost\n127.0.1.1\t$DHIS2_SPECIMEN_HOST\tspecimen"
+exit
+
 # We install and configure a default OS environment for the DHIS2 instance
-apt-get install -y curl dialog git jq sed software-properties-common unattended-upgrades
+apt-get install -yqq dialog git sed software-properties-common unattended-upgrades
 
 # Install newer Ansible
 apt-add-repository --yes --update ppa:ansible/ansible
-apt-get install -y ansible python3-netaddr
+apt-get install -yqq ansible python3-netaddr
 
 # Install Ansible collection
 ansible-galaxy collection install community.general -f
