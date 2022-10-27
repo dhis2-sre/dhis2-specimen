@@ -35,6 +35,6 @@ sed -i "/^fqdn=\"\"/s//fqdn=\""$DHIS2_SPECIMEN_HOST"\"/" $DHIS2_TOOLS_DIR/deploy
 sed -i "/^guest_os=22.04/s//guest_os=`lsb_release -rs`/" $DHIS2_TOOLS_DIR/deploy/inventory/hosts
 
 # Deploy DHIS2
-#ansible-playbook $DHIS2_TOOLS_DIR/deploy/lxd-init.yml # needed to setup lxd environment.
-#ansible-playbook $DHIS2_TOOLS_DIR/deploy/dhis2.yaml -i $DHIS2_TOOLS_DIR/deploy/inventory/hosts
+ansible-playbook $DHIS2_TOOLS_DIR/deploy/lxd-init.yml # needed to setup lxd environment.
+ansible-playbook $DHIS2_TOOLS_DIR/deploy/dhis2.yaml -i $DHIS2_TOOLS_DIR/deploy/inventory/hosts
 
