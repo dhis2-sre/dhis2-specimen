@@ -18,6 +18,9 @@ echo -e "127.0.0.1\tlocalhost\n127.0.1.1\t$DHIS2_SPECIMEN_HOST `hostname`\n\n::1
 apt-get install -yqq dialog git lxc lxd sed software-properties-common ufw unattended-upgrades
 
 # TODO: lxc and ufw are not requested by the setup
+# TODO: configure firewall
+ufw limit 22
+ufw --force enable
 
 # Install newer Ansible
 apt-add-repository --yes --update ppa:ansible/ansible
