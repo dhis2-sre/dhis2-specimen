@@ -7,7 +7,7 @@ apt-get -qq update
 apt-get -yqq dist-upgrade
 
 # We install and configure a default OS environment for the DHIS2 instance
-apt-get install -y certbot dialog git software-properties-common unattended-upgrades
+apt-get install -y certbot dialog git sed software-properties-common unattended-upgrades
 
 # Install newer Ansible
 apt-add-repository --yes --update ppa:ansible/ansible
