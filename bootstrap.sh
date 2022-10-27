@@ -29,8 +29,10 @@ git clone https://github.com/dhis2/dhis2-server-tools $DHIS2_TOOLS_DIR
 
 # Edit config
 sed -i '/^training/s//#&/' $DHIS2_TOOLS_DIR/deploy/inventory/hosts
-sed -i "/^fqdn=\"\"/s//fqdn=\""$DHIS2_SPECIMEN_HOST"\"/" $DHIS2_TOOLS_DIR/deploy/inventory/hosts
+sed -i '/^timezone="Africa\/Nairobi"/s//timezone="UTC"/' $DHIS2_TOOLS_DIR/deploy/inventory/hosts
 sed -i "/^email=\"\"/s//email=\""$DHIS2_EMAIL"\"/" $DHIS2_TOOLS_DIR/deploy/inventory/hosts
+sed -i "/^fqdn=\"\"/s//fqdn=\""$DHIS2_SPECIMEN_HOST"\"/" $DHIS2_TOOLS_DIR/deploy/inventory/hosts
+sed -i "/^guest_os=22.04/s//guest_os=`lsb_release -rs`/" $DHIS2_TOOLS_DIR/deploy/inventory/hosts
 
 # Deploy DHIS2
 #ansible-playbook $DHIS2_TOOLS_DIR/deploy/lxd-init.yml # needed to setup lxd environment.
