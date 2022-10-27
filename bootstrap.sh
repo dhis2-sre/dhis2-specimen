@@ -39,6 +39,9 @@ sed -i "/^email=\"\"/s//email=\""$DHIS2_EMAIL"\"/" $DHIS2_TOOLS_DIR/deploy/inven
 sed -i "/^fqdn=\"\"/s//fqdn=\""$DHIS2_SPECIMEN_HOST"\"/" $DHIS2_TOOLS_DIR/deploy/inventory/hosts
 sed -i "/^guest_os=22.04/s//guest_os=`lsb_release -rs`/" $DHIS2_TOOLS_DIR/deploy/inventory/hosts
 
+# TODO: use latest DHIS2 version
+# TODO: configure IPv6
+
 # Deploy DHIS2
 #ansible-playbook $DHIS2_TOOLS_DIR/deploy/lxd_setup.yml
 #ansible-playbook $DHIS2_TOOLS_DIR/deploy/dhis2.yml -i $DHIS2_TOOLS_DIR/deploy/inventory/hosts
