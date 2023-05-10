@@ -1,0 +1,15 @@
+Unit]
+Description=DHIS2
+After=network.target postgresql.service
+
+[Service]
+Type=forking
+User=dhis2
+Group=dhis2
+WorkingDirectory=/opt/dhis2
+ExecStart=/opt/dhis2/tomcat/bin/startup.sh
+ExecStop=/opt/dhis2/tomcat/bin/shutdown.sh
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

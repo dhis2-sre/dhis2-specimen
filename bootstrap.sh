@@ -15,10 +15,10 @@ DHIS2_SPECIMEN_HOST=`curl -s http://169.254.169.254/openstack/latest/meta_data.j
 echo -e "127.0.0.1\tlocalhost\n127.0.1.1\t$DHIS2_SPECIMEN_HOST `hostname`\n\n::1\tlocalhost ip6-localhost ip6-loopback\nff02::1\tip6-allnodes\nff02::2\tip6-allrouters" > /etc/hosts
  
 # We install and configure a default OS environment
-apt-get install -yqq git sed software-properties-common unattended-upgrades
+apt-get install -yqq gettext-base git sed software-properties-common unattended-upgrades
 
 # We install and configure default services
-apt-get install -yqq certbot default-jdk-headless default-jre-headless nginx postgresql postgresql-client tomcat9 tomcat9-admin tomcat9-user
+apt-get install -yqq certbot default-jdk-headless default-jre-headless nginx postgresql postgresql-client postgresql-*-postgis-3 tomcat9 tomcat9-admin tomcat9-user
 
 # Install other useful packages
 apt-get install net-tools testinfra
