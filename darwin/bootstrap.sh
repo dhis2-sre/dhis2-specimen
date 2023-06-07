@@ -27,10 +27,8 @@ fi
 apt-get install -yqq gettext-base git sed software-properties-common sudo
 
 # We install and configure default services
+apt-get install -yqq mc net-tools reptyr testinfra
 apt-get install -yqq certbot default-jdk-headless default-jre-headless nginx postgresql postgresql-client postgresql-*-postgis-3 tomcat9 tomcat9-admin tomcat9-user
-
-# Install other useful packages
-apt-get install -yqq mc net-tools reptyr testinfra unattended-upgrades
 
 # Disable password authentication
 mkdir -p /etc/ssh/sshd_config.d
@@ -49,4 +47,5 @@ sudo -D $TMP_DIR -u postgres psql -c "create extension btree_gin;" $DHIS2_DB
 sudo -D $TMP_DIR -u postgres psql -c "create extension pg_trgm;" $DHIS2_DB
 
 # Perform a final upgrade
+apt-get install -yqq unattended-upgrades
 apt-get dist-upgrade -yqq
