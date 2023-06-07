@@ -19,12 +19,12 @@ apt-get -yqq dist-upgrade
 
 # Try to fetch the FQDN
 apt-get install -yqq curl jq
-DHIS2_SPECIMEN_HOST=$(curl -s --connect-timeout 10 http://169.254.169.254/openstack/latest/meta_data.json | jq -j .name)
+DHIS2_HOSTNAME=$(curl -s --connect-timeout 10 http://169.254.169.254/openstack/latest/meta_data.json | jq -j .name)
 
 # Set the FQDN
-if [ -n "$DHIS2_SPECIMEN_HOST" ]; then
-    echo "Setting hostname to '$DHIS2_SPECIMEN_HOST'"
-    echo -e "127.0.0.1\tlocalhost\n127.0.1.1\t$DHIS2_SPECIMEN_HOST $(hostname)\n\n::1\tlocalhost ip6-localhost ip6-loopback\nff02::1\tip6-allnodes\nff02::2\tip6-allrouters" > /etc/hosts
+if [ -n "$DHIS2_HOSTNAME" ]; then
+    echo "Setting hostname to '$DHIS2_HOSTNAME'"
+    echo -e "127.0.0.1\tlocalhost\n127.0.1.1\t$DHIS2_HOSTNAME $(hostname)\n\n::1\tlocalhost ip6-localhost ip6-loopback\nff02::1\tip6-allnodes\nff02::2\tip6-allrouters" > /etc/hosts
 fi
 
 # We install and configure a default OS environment
