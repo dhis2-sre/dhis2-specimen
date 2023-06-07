@@ -24,13 +24,13 @@ if [ -n "$DHIS2_HOSTNAME" ]; then
 fi
 
 # We install and configure a default OS environment
-apt-get install -yqq gettext-base git sed software-properties-common sudo unattended-upgrades wget
+apt-get install -yqq gettext-base git sed software-properties-common sudo unattended-upgrades
 
 # We install and configure default services
 apt-get install -yqq certbot default-jdk-headless default-jre-headless nginx postgresql postgresql-client postgresql-*-postgis-3 tomcat9 tomcat9-admin tomcat9-user
 
 # Install other useful packages
-apt-get install -yqq net-tools testinfra
+apt-get install -yqq net-tools testinfra mc
 
 # Disable password authentication
 mkdir -p /etc/ssh/sshd_config.d
@@ -47,3 +47,6 @@ sudo -D $TMP_DIR -u postgres psql -c "ALTER USER $DHIS2_DBUSER PASSWORD '$DHIS2_
 sudo -D $TMP_DIR -u postgres psql -c "create extension postgis;" $DHIS2_DB
 sudo -D $TMP_DIR -u postgres psql -c "create extension btree_gin;" $DHIS2_DB
 sudo -D $TMP_DIR -u postgres psql -c "create extension pg_trgm;" $DHIS2_DB
+
+# Perform a final upgrade
+apt-get dist-upgrade -yqq
