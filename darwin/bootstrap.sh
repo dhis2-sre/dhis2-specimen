@@ -24,13 +24,13 @@ if [ -n "$DHIS2_HOSTNAME" ]; then
 fi
 
 # We install and configure a default OS environment
-apt-get install -yqq gettext-base git sed software-properties-common sudo unattended-upgrades
+apt-get install -yqq gettext-base git sed software-properties-common sudo
 
 # We install and configure default services
 apt-get install -yqq certbot default-jdk-headless default-jre-headless nginx postgresql postgresql-client postgresql-*-postgis-3 tomcat9 tomcat9-admin tomcat9-user
 
 # Install other useful packages
-apt-get install -yqq net-tools testinfra mc
+apt-get install -yqq mc net-tools reptyr testinfra unattended-upgrades
 
 # Disable password authentication
 mkdir -p /etc/ssh/sshd_config.d
