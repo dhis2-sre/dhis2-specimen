@@ -13,10 +13,6 @@ DHIS2_DBPASS=$DHIS2_USER
 TMP_DIR="/tmp"
 DEBIAN_FRONTEND=noninteractive
 
-# Update the environment
-apt-get -qq update
-apt-get -yqq dist-upgrade
-
 # Try to fetch the FQDN
 apt-get install -yqq curl jq
 DHIS2_HOSTNAME=$(curl -s --connect-timeout 10 http://169.254.169.254/openstack/latest/meta_data.json | jq -j .name)
