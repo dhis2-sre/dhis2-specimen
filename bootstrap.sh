@@ -20,7 +20,8 @@ DHIS2_TMP=$(mktemp -d)
 DHIS2_SRC=$DHIS_TMP/dhis2-specimen
 
 # Clone the directory with templates
-git clone https://github.com/dhis2-sre/dhis2-specimen.git $DHIS_SRC
+# TODO: check that the repository is not empty
+git clone https://github.com/dhis2-sre/dhis2-specimen.git $DHIS2_SRC
 
 # Fetch hostname and FQDN
 # TODO: check that the left part matches
