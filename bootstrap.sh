@@ -41,7 +41,7 @@ apt-get install -yqq net-tools software-properties-common testinfra
 # We install and configure default services
 apt-get install -yqq certbot nginx
 mkdir -p /var/www/$DHIS2_FQDN
-certbot certonly --quiet --noninteractive --agree-tos -m $DHIS2_EMAIL --webroot -w /var/www/html --post-hook "systemctl reload nginx" $DHIS_FQDN
+certbot certonly --quiet --noninteractive --agree-tos -m $DHIS2_EMAIL --webroot -w /var/www/html --post-hook "systemctl reload nginx" $DHIS2_FQDN
 cat $DHIS2_SRC/templates/etc/nginx/sites-available/specimen | envsubst "$(printf '${%s} ' ${!DHIS2_*})" > etc/nginx/sites-available/$DHIS2_FQDN
 ln -s /etc/nginx/sites-available/$DHIS_FQDN /etc/nginx/sites-enabled/$DHIS_FQDN
 systemctl reload nginx
