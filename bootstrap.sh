@@ -31,7 +31,7 @@ DHIS2_HOST=$(hostname)
 DHIS2_FQDN=$(curl -s --connect-timeout 10 http://169.254.169.254/openstack/latest/meta_data.json | jq -j .name)
 
 # Export variables for templating
-export DHIS2_HOST DHIS2_FQDN DHIS2_PORT DHIS2_DB DHIS2_DBUSER DHIS2_DBPASS
+export DHIS2_HOME DHIS2_USER DHIS2_GROUP DHIS2_HOST DHIS2_FQDN DHIS2_PORT DHIS2_DB DHIS2_DBUSER DHIS2_DBPASS
 
 # Set the FQDN
 # TODO: handle missing FQDN after "if"
@@ -81,7 +81,7 @@ sudo -D "$DHIS2_TMP" -u postgres psql -c "create extension pg_trgm;" $DHIS2_DB
 useradd -d $DHIS2_HOME -k /dev/null -m -r -s /usr/sbin/nologin $DHIS2_USER
 
 # Create DHIS2 configuration
-cat "$DHIS2_SRC/templates/opt/dhis2/dhis.conf" | envsubst "$(printf '${%s} ' ${!DHIS2_*})" > "/opt/dhis2/dhis.conf"
+cat "$DHIS2_SRC/templates/opt/dhis2/dhis.conf" | envsubst "$(printf '${%s} ' ${!DHIS2_*})" > "$DHIS2_HOME/dhis.conf"
 
 # Install and configure Tomcat
 apt-get install -yqq default-jdk-headless default-jre-headless 
