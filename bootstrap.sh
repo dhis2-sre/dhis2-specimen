@@ -37,7 +37,7 @@ export DHIS2_HOME DHIS2_USER DHIS2_GROUP DHIS2_HOST DHIS2_FQDN DHIS2_PORT DHIS2_
 # TODO: handle missing FQDN after "if"
 if [ -n "$DHIS2_FQDN" ]; then
     echo "Setting hostname to '$DHIS2_FQDN'"
-    cat "$DHIS2_SRC/templates/etc/hosts" | envsubst "$(printf '${%s} ' ${!DHIS2_*})" > /etc/hosts
+    cat "$DHIS2_SRC"/templates/etc/hosts | envsubst "$(printf '${%s} ' ${!DHIS2_*})" > /etc/hosts
 fi
 
 # We install and configure a default OS environment and tools
@@ -50,17 +50,17 @@ systemctl reload ssh
 
 # We install and configure default services
 apt-get install -yqq certbot nginx
-mkdir -p "/var/www/html/.well-known" "/var/www/$DHIS2_FQDN"
+mkdir -p /var/www/html/.well-known /var/www/"$DHIS2_FQDN"
 
 # Generate a SSL certificate
 certbot certonly --quiet --noninteractive --agree-tos -m "$DHIS2_EMAIL" --webroot -w /var/www/html --post-hook "systemctl reload nginx" -d "$DHIS2_FQDN"
 
 # Apply system-wide Nginx setup
-cp "$DHIS2_SRC/templates/etc/nginx/conf.d/*.conf" "/etc/nginx/conf.d"
+cp "$DHIS2_SRC"/templates/etc/nginx/conf.d/*.conf /etc/nginx/conf.d
 
 # Configure virtual host
-cat "$DHIS2_SRC/templates/etc/nginx/sites-available/specimen" | envsubst "$(printf '${%s} ' ${!DHIS2_*})" > "/etc/nginx/sites-available/$DHIS2_FQDN"
-ln -s "/etc/nginx/sites-available/$DHIS2_FQDN" "/etc/nginx/sites-enabled/$DHIS2_FQDN"
+cat "$DHIS2_SRC"/templates/etc/nginx/sites-available/specimen | envsubst "$(printf '${%s} ' ${!DHIS2_*})" > /etc/nginx/sites-available/"$DHIS2_FQDN"
+ln -s /etc/nginx/sites-available/"$DHIS2_FQDN" /etc/nginx/sites-enabled/"$DHIS2_FQDN"
 
 # Apply Nginx configuration
 systemctl reload nginx
@@ -81,7 +81,7 @@ sudo -D "$DHIS2_TMP" -u postgres psql -c "create extension pg_trgm;" $DHIS2_DB
 useradd -d $DHIS2_HOME -k /dev/null -m -r -s /usr/sbin/nologin $DHIS2_USER
 
 # Create DHIS2 configuration
-cat "$DHIS2_SRC/templates/opt/dhis2/dhis.conf" | envsubst "$(printf '${%s} ' ${!DHIS2_*})" > "$DHIS2_HOME/dhis.conf"
+cat "$DHIS2_SRC"/templates/opt/dhis2/dhis.conf | envsubst "$(printf '${%s} ' ${!DHIS2_*})" > "$DHIS2_HOME"/dhis.conf
 
 # Install and configure Tomcat
 apt-get install -yqq default-jdk-headless default-jre-headless 
