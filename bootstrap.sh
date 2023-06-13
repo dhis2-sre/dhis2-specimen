@@ -13,7 +13,7 @@ DHIS2_DBPASS=$DHIS2_USER
 DEBIAN_FRONTEND=noninteractive
 
 # Install minimally necessary tools
-apt-get install -yqq coreutis curl gettext-base git jq sudo
+apt-get install -yqq coreutils curl gettext-base git jq sudo
 
 # Set additional variables
 DHIS2_TMP=$(mktemp -d)
@@ -41,7 +41,7 @@ apt-get install -yqq net-tools software-properties-common testinfra
 # We install and configure default services
 apt-get install -yqq certbot nginx
 mkdir -p "/var/www/$DHIS2_FQDN"
-certbot certonly --quiet --noninteractive --agree-tos -m $DHIS2_EMAIL --webroot -w /var/www/html --post-hook "systemctl reload nginx" "$DHIS2_FQDN"
+certbot certonly --quiet --noninteractive --agree-tos -m "$DHIS2_EMAIL" --webroot -w /var/www/html --post-hook "systemctl reload nginx" -d "$DHIS2_FQDN"
 cat "$DHIS2_SRC/templates/etc/nginx/sites-available/specimen" | envsubst "$(printf '${%s} ' ${!DHIS2_*})" > "/etc/nginx/sites-available/$DHIS2_FQDN"
 ln -s "/etc/nginx/sites-available/$DHIS2_FQDN" "/etc/nginx/sites-enabled/$DHIS2_FQDN"
 systemctl reload nginx
@@ -66,10 +66,9 @@ systemctl reload ssh
 # Create an unprivileged user for DHIS2
 useradd -d $DHIS2_HOME -k /dev/null -m -r -s /usr/sbin/nologin $DHIS2_USER
 
-
 # Perform a final upgrade
 apt-get install -yqq unattended-upgrades
 apt-get dist-upgrade -yqq
 
 # Perform a final cleanup
-# rm -rf $DHIS2_TMP
+rm -rf $DHIS2_TMP
