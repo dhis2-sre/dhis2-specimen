@@ -26,7 +26,7 @@ server {
     }
 
     location / {
-        proxy_pass http://localhost:18080/;
+        proxy_pass http://localhost:$DHIS2_PORT/;
 
         # Please ensure that Tomcat's server.xml recognises these headers
         proxy_set_header X-Forwarded-Host   $host;
