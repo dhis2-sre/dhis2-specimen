@@ -82,7 +82,8 @@ sudo -u postgres psql -c "create extension pg_trgm;" $DHIS2_DB
 useradd -d $DHIS2_HOME -k /dev/null -m -r -s /usr/sbin/nologin $DHIS2_USER
 
 # Configure DHIS2 directories
-mkdir -p "$DHIS2_TOMCAT"/conf "$DHIS2_TOMCAT"/webapp
+mkdir -p "$DHIS2_TOMCAT"/conf "$DHIS2_TOMCAT"/webapps
+wget -O "$DHIS2_TOMCAT"/webapps/ROOT.war https://releases.dhis2.org/40/dhis2-stable-40.0.0.war
 chown -R $DHIS2_USER:$DHIS2_GROUP $DHIS2_TOMCAT
 
 # Install and configure Tomcat
@@ -105,6 +106,7 @@ apt-get install -yqq unattended-upgrades
 apt-get dist-upgrade -yqq
 
 # Launch DHIS2
+
 systemctl enable dhis2
 systemctl start dhis2
 

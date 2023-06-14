@@ -1,4 +1,4 @@
-Unit]
+[Unit]
 Description=DHIS2
 After=network.target postgresql.service
 
