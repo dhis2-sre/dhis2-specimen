@@ -8,6 +8,7 @@ DHIS2_GROUP=$DHIS2_USER
 DHIS2_DB="empty"
 DHIS2_DBUSER=$DHIS2_USER
 DHIS2_DBPASS=$DHIS2_USER
+DHIS2_TOMCAT="$DHIS2_HOME/tomcat"
 DHIS2_PORT=18080
 
 # The script runs in the non-interactive mode
@@ -31,7 +32,7 @@ DHIS2_HOST=$(hostname)
 DHIS2_FQDN=$(curl -s --connect-timeout 10 http://169.254.169.254/openstack/latest/meta_data.json | jq -j .name)
 
 # Export variables for templating
-export DHIS2_HOME DHIS2_USER DHIS2_GROUP DHIS2_HOST DHIS2_FQDN DHIS2_PORT DHIS2_DB DHIS2_DBUSER DHIS2_DBPASS
+export DHIS2_HOME DHIS2_USER DHIS2_GROUP DHIS2_HOST DHIS2_FQDN DHIS2_PORT DHIS2_DB DHIS2_DBUSER DHIS2_DBPASS DHIS2_TOMCAT
 
 # Set the FQDN
 # TODO: handle missing FQDN after "if"
@@ -67,14 +68,12 @@ systemctl reload nginx
 
 # Create the DHIS2 database
 apt-get install -yqq postgresql postgresql-client postgresql-*-postgis-3
-cd "$DHIS2_TMP"
 sudo -u postgres createuser -SDR $DHIS2_DBUSER
 sudo -u postgres createdb -O $DHIS2_DBUSER $DHIS2_DB
 sudo -u postgres psql -c "ALTER USER $DHIS2_DBUSER PASSWORD '$DHIS2_DBPASS';"
 sudo -u postgres psql -c "create extension postgis;" $DHIS2_DB
 sudo -u postgres psql -c "create extension btree_gin;" $DHIS2_DB
 sudo -u postgres psql -c "create extension pg_trgm;" $DHIS2_DB
-cd ~
 
 # Import data into the database
 # TODO
@@ -82,16 +81,32 @@ cd ~
 # Create an unprivileged user for DHIS2
 useradd -d $DHIS2_HOME -k /dev/null -m -r -s /usr/sbin/nologin $DHIS2_USER
 
-# Create DHIS2 configuration
-cat "$DHIS2_SRC"/templates/opt/dhis2/dhis.conf | envsubst "$(printf '${%s} ' ${!DHIS2_*})" > "$DHIS2_HOME"/dhis.conf
+# Configure DHIS2 directories
+mkdir -p "$DHIS2_TOMCAT"/conf "$DHIS2_TOMCAT"/webapp
+chown -R $DHIS2_USER:$DHIS2_GROUP $DHIS2_TOMCAT
 
 # Install and configure Tomcat
 apt-get install -yqq default-jdk-headless default-jre-headless 
-apt-get install -yqq tomcat9 tomcat9-user
+apt-get install -yqq tomcat9
+
+# Disable the default Tomcat instance
+systemctl stop tomcat9
+systemctl disable tomcat9
+
+# Create DHIS2 configuration
+cat "$DHIS2_SRC"/templates/opt/dhis2/dhis.conf | envsubst "$(printf '${%s} ' ${!DHIS2_*})" > "$DHIS2_HOME"/dhis.conf
+cat "$DHIS2_SRC"/templates/etc/systemd/system/dhis2.service | envsubst "$(printf '${%s} ' ${!DHIS2_*})" > /etc/systemd/system/dhis2.service
+systemctl daemon-reload
+cat "$DHIS2_SRC"/templates/opt/dhis2/tomcat/conf/server.xml | envsubst "$(printf '${%s} ' ${!DHIS2_*})" > "$DHIS2_TOMCAT"/conf/server.xml
+cp /usr/share/tomcat9/etc/web.xml "$DHIS2_TOMCAT"/conf/web.xml
 
 # Perform a final upgrade
 apt-get install -yqq unattended-upgrades
 apt-get dist-upgrade -yqq
+
+# Launch DHIS2
+systemctl enable dhis2
+systemctl start dhis2
 
 # Perform a final cleanup
 rm -rf "$DHIS2_TMP"

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server>
+  <Service name="Catalina">
+    <Connector port="$DHIS2_PORT" protocol="HTTP/1.1" address="127.0.0.1" connectionTimeout="20000" redirectPort="8443" />
+    <Engine name="Catalina" defaultHost="localhost">
+      <Host name="localhost"  appBase="webapps" unpackWARs="true" autoDeploy="true">
+        <Valve className="org.apache.catalina.valves.RemoteIpValve" hostHeader="X-Forwarded-Host" protocolHeader="X-Forwarded-Proto" />
+      </Host>
+    </Engine>
+  </Service>
+</Server>
