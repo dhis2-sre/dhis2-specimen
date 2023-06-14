@@ -41,9 +41,6 @@ if [ -n "$DHIS2_FQDN" ]; then
     cat "$DHIS2_SRC"/templates/etc/hosts | envsubst "$(printf '${%s} ' ${!DHIS2_*})" > /etc/hosts
 fi
 
-# We install and configure a default OS environment and tools
-apt-get install -yqq net-tools software-properties-common testinfra
-
 # Disable password authentication
 mkdir -p /etc/ssh/sshd_config.d
 echo "PasswordAuthentication no" > /etc/ssh/sshd_config.d/no_password.conf
@@ -100,6 +97,9 @@ cat "$DHIS2_SRC"/templates/etc/systemd/system/dhis2.service | envsubst "$(printf
 systemctl daemon-reload
 cat "$DHIS2_SRC"/templates/opt/dhis2/tomcat/conf/server.xml | envsubst "$(printf '${%s} ' ${!DHIS2_*})" > "$DHIS2_TOMCAT"/conf/server.xml
 cp /usr/share/tomcat9/etc/web.xml "$DHIS2_TOMCAT"/conf/web.xml
+
+# Install useful tools
+# apt-get install -yqq net-tools testinfra
 
 # Perform a final upgrade
 apt-get install -yqq unattended-upgrades
