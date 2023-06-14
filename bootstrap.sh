@@ -67,12 +67,14 @@ systemctl reload nginx
 
 # Create the DHIS2 database
 apt-get install -yqq postgresql postgresql-client postgresql-*-postgis-3
-sudo -D "$DHIS2_TMP" -u postgres createuser -SDR $DHIS2_DBUSER
-sudo -D "$DHIS2_TMP" -u postgres createdb -O $DHIS2_DBUSER $DHIS2_DB
-sudo -D "$DHIS2_TMP" -u postgres psql -c "ALTER USER $DHIS2_DBUSER PASSWORD '$DHIS2_DBPASS';"
-sudo -D "$DHIS2_TMP" -u postgres psql -c "create extension postgis;" $DHIS2_DB
-sudo -D "$DHIS2_TMP" -u postgres psql -c "create extension btree_gin;" $DHIS2_DB
-sudo -D "$DHIS2_TMP" -u postgres psql -c "create extension pg_trgm;" $DHIS2_DB
+cd "$DHIS2_TMP"
+sudo -u postgres createuser -SDR $DHIS2_DBUSER
+sudo -u postgres createdb -O $DHIS2_DBUSER $DHIS2_DB
+sudo -u postgres psql -c "ALTER USER $DHIS2_DBUSER PASSWORD '$DHIS2_DBPASS';"
+sudo -u postgres psql -c "create extension postgis;" $DHIS2_DB
+sudo -u postgres psql -c "create extension btree_gin;" $DHIS2_DB
+sudo -u postgres psql -c "create extension pg_trgm;" $DHIS2_DB
+cd ~
 
 # Import data into the database
 # TODO
