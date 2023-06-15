@@ -102,7 +102,6 @@ apt-get install -yqq unattended-upgrades
 apt-get dist-upgrade -yqq
 
 # Launch DHIS2
-
 systemctl enable dhis2
 systemctl start dhis2
 
