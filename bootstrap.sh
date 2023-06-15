@@ -80,12 +80,11 @@ useradd -d $DHIS2_HOME -k /dev/null -m -r -s /usr/sbin/nologin $DHIS2_USER
 
 # Configure DHIS2 directories
 mkdir -p "$DHIS2_TOMCAT"/conf "$DHIS2_TOMCAT"/webapps
-wget -O "$DHIS2_TOMCAT"/webapps/ROOT.war https://releases.dhis2.org/40/dhis2-stable-40.0.0.war
 chown -R $DHIS2_USER:$DHIS2_GROUP $DHIS2_TOMCAT
+wget -O "$DHIS2_TOMCAT"/webapps/ROOT.war https://releases.dhis2.org/40/dhis2-stable-40.0.0.war
 
 # Install and configure Tomcat
-apt-get install -yqq default-jdk-headless default-jre-headless 
-apt-get install -yqq tomcat9
+apt-get install -yqq default-jdk tomcat9
 
 # Disable the default Tomcat instance
 systemctl stop tomcat9
@@ -97,9 +96,6 @@ cat "$DHIS2_SRC"/templates/etc/systemd/system/dhis2.service | envsubst "$(printf
 systemctl daemon-reload
 cat "$DHIS2_SRC"/templates/opt/dhis2/tomcat/conf/server.xml | envsubst "$(printf '${%s} ' ${!DHIS2_*})" > "$DHIS2_TOMCAT"/conf/server.xml
 cp /usr/share/tomcat9/etc/web.xml "$DHIS2_TOMCAT"/conf/web.xml
-
-# Install useful tools
-# apt-get install -yqq net-tools testinfra
 
 # Perform a final upgrade
 apt-get install -yqq unattended-upgrades

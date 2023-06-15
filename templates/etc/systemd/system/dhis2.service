@@ -5,11 +5,11 @@ After=network.target postgresql.service
 [Service]
 User=$DHIS2_USER
 Group=$DHIS2_GROUP
-Environment=JAVA_OPTS="-Djava.awt.headless=true"
+Environment=JAVA_OPTS="-Xms1g -Xmx2g"
 Environment=CATALINA_BASE=$DHIS2_TOMCAT
 Environment=CATALINA_HOME=/usr/share/tomcat9
-ExecStart=java ${JAVA_OPTS} -classpath ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar -Dcatalina.base=${CATALINA_BASE} -Dcatalina.home=${CATALINA_HOME} org.apache.catalina.startup.Bootstrap start
-ExecStop=java ${JAVA_OPTS} -classpath ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar -Dcatalina.base=${CATALINA_BASE} -Dcatalina.home=${CATALINA_HOME} org.apache.catalina.startup.Bootstrap stop
+ExecStart=java $JAVA_OPTS -Djava.awt.headless=true -classpath ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar -Dcatalina.base=${CATALINA_BASE} -Dcatalina.home=${CATALINA_HOME} org.apache.catalina.startup.Bootstrap start
+ExecStop=java $JAVA_OPTS -Djava.awt.headless=true -classpath ${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar -Dcatalina.base=${CATALINA_BASE} -Dcatalina.home=${CATALINA_HOME} org.apache.catalina.startup.Bootstrap stop
 SuccessExitStatus=143
 
 [Install]

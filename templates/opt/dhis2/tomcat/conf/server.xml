@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Server>
+  <Listener className="org.apache.catalina.security.SecurityListener" minimumUmask="0027" />.
+  <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
   <Service name="Catalina">
     <Connector port="$DHIS2_PORT" protocol="HTTP/1.1" address="127.0.0.1" connectionTimeout="20000" redirectPort="8443" />
     <Engine name="Catalina" defaultHost="localhost">
