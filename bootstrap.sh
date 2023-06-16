@@ -7,7 +7,7 @@ DHIS2_USER="dhis2"
 DHIS2_GROUP=$DHIS2_USER
 DHIS2_DB="empty"
 DHIS2_DBUSER=$DHIS2_USER
-DHIS2_DBPASS=$DHIS2_USER
+DHIS2_DBPASS=$(< /dev/urandom tr -cd "[:alnum:]" | head -c 32; echo)
 DHIS2_TOMCAT="$DHIS2_HOME/tomcat"
 DHIS2_PORT=18080
 
