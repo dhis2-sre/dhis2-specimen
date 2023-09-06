@@ -1,5 +1,8 @@
 #!/usr/bin/bash
 
+# DHIS2 download URL
+DHIS2_WARFILE="https://releases.dhis2.org/40/dhis2-stable-40.0.1.war"
+
 # Common variables
 DHIS2_EMAIL="security@dhis2.org"
 DHIS2_HOME="/opt/dhis2"
@@ -65,12 +68,12 @@ systemctl reload nginx
 
 # Create the DHIS2 database
 apt-get install -yqq postgresql postgresql-client postgresql-*-postgis-3
-sudo -u postgres createuser -SDR $DHIS2_DBUSER
-sudo -u postgres createdb -O $DHIS2_DBUSER $DHIS2_DB
-sudo -u postgres psql -c "ALTER USER $DHIS2_DBUSER PASSWORD '$DHIS2_DBPASS';"
-sudo -u postgres psql -c "create extension postgis;" $DHIS2_DB
-sudo -u postgres psql -c "create extension btree_gin;" $DHIS2_DB
-sudo -u postgres psql -c "create extension pg_trgm;" $DHIS2_DB
+sudo -u postgres -i createuser -SDR $DHIS2_DBUSER
+sudo -u postgres -i createdb -O $DHIS2_DBUSER $DHIS2_DB
+sudo -u postgres -i psql -c "ALTER USER $DHIS2_DBUSER PASSWORD '$DHIS2_DBPASS';"
+sudo -u postgres -i psql -c "create extension postgis;" $DHIS2_DB
+sudo -u postgres -i psql -c "create extension btree_gin;" $DHIS2_DB
+sudo -u postgres -i psql -c "create extension pg_trgm;" $DHIS2_DB
 
 # Import data into the database
 # TODO
@@ -81,7 +84,7 @@ useradd -d $DHIS2_HOME -k /dev/null -m -r -s /usr/sbin/nologin $DHIS2_USER
 # Configure DHIS2 directories
 mkdir -p "$DHIS2_TOMCAT"/conf "$DHIS2_TOMCAT"/webapps
 chown -R $DHIS2_USER:$DHIS2_GROUP $DHIS2_TOMCAT
-wget -O "$DHIS2_TOMCAT"/webapps/ROOT.war https://releases.dhis2.org/40/dhis2-stable-40.0.0.war
+wget -O "$DHIS2_TOMCAT"/webapps/ROOT.war $DHIS2_WARFILE
 
 # Install and configure Tomcat
 apt-get install -yqq default-jdk tomcat9
