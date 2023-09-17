@@ -67,13 +67,18 @@ ln -s /etc/nginx/sites-available/"$DHIS2_FQDN" /etc/nginx/sites-enabled/"$DHIS2_
 systemctl reload nginx
 
 # Create the DHIS2 database
-apt-get install -yqq postgresql postgresql-client postgresql-*-postgis-3
+apt-get install -yqq postgresql postgresql-client postgresql-*-postgis-3 postgresql-*-pg-qualstats
+PG_VERSION=$(pg_config --version | cut -d' ' -f2 | cut -d'.' -f1)
+cp "$DHIS2_SRC"/templates/etc/postgresql/version/main/conf.d/*.conf /etc/postgresql/"$PG_VERSION"/main/conf.d
 sudo -u postgres -i createuser -SDR $DHIS2_DBUSER
 sudo -u postgres -i createdb -O $DHIS2_DBUSER $DHIS2_DB
 sudo -u postgres -i psql -c "ALTER USER $DHIS2_DBUSER PASSWORD '$DHIS2_DBPASS';"
 sudo -u postgres -i psql -c "create extension postgis;" $DHIS2_DB
 sudo -u postgres -i psql -c "create extension btree_gin;" $DHIS2_DB
 sudo -u postgres -i psql -c "create extension pg_trgm;" $DHIS2_DB
+
+# Additional extension for monitoring
+sudo -u postgres -i psql -c "create extension pg_stat_statements;" $DHIS2_DB
 
 # Import data into the database
 # TODO
