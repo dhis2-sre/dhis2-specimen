@@ -11,6 +11,7 @@
     <Engine name="Catalina" defaultHost="localhost">
       <Host name="localhost"  appBase="webapps" unpackWARs="true" autoDeploy="true">
         <Valve className="org.apache.catalina.valves.RemoteIpValve" hostHeader="X-Forwarded-Host" protocolHeader="X-Forwarded-Proto" />
+        <Valve className="org.apache.catalina.valves.rewrite.RewriteValve"/>
       </Host>
     </Engine>
   </Service>
