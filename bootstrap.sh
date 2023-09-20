@@ -103,6 +103,8 @@ cat "$DHIS2_SRC"/templates/opt/dhis2/dhis.conf | envsubst "$(printf '${%s} ' ${!
 cat "$DHIS2_SRC"/templates/etc/systemd/system/dhis2.service | envsubst "$(printf '${%s} ' ${!DHIS2_*})" > /etc/systemd/system/dhis2.service
 systemctl daemon-reload
 cat "$DHIS2_SRC"/templates/opt/dhis2/tomcat/conf/server.xml | envsubst "$(printf '${%s} ' ${!DHIS2_*})" > "$DHIS2_TOMCAT"/conf/server.xml
+cp "$DHIS2_SRC"/templates/opt/dhis2/tomcat/conf/context.xml "$DHIS2_TOMCAT"/conf/context.xml
+#cp "$DHIS2_SRC"/templates/opt/dhis2/tomcat/conf/log4j.xml "$DHIS2_TOMCAT"/conf/log4j.xml
 cp /usr/share/tomcat9/etc/web.xml "$DHIS2_TOMCAT"/conf/web.xml
 
 # Perform a final upgrade
