@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 # DHIS2 download URL
-DHIS2_WARFILE="https://releases.dhis2.org/40/dhis2-stable-40.0.1.war"
+DHIS2_WARFILE="https://releases.dhis2.org/40/dhis2-stable-latest.war"
 
 # Common variables
 DHIS2_EMAIL="security@dhis2.org"
